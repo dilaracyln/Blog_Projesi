@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    AnaSayfa - {{ block.super }}
+{% endblock %}
+
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- container'ın yanına fluid yazmamızın sebebi belirtilen rennk aralığındaki sütunların ekrana tam yerleşmesini sağlamaktır. -->
+        <div class="row">
+            <div class="col-md-4" style="background-color: #00ad9c; height: 100px"></div>
+            <div class="col-md-8" style="background-color: #6f42c1; height: 100px"></div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-2" style="background-color: #802022; height: 100px"></div>
+            <div class="col-md-6" style="background-color: #80bdff; height: 100px;"></div>
+            <div class="col-md-4" style="background-color: red; height: 100px;"></div>
+            <div class="row">
+                <div class="column">
+                    <p>
+                    <div align="center"><img alt="Forest" src="media/img_forest.jpg"
+                                             style="width:750px; margin: 10px; padding: 10px;margin-left: 200px;">
+                    </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <center>
+        <div style="color: #0E2231; background-color: #009999;">
+
+            <p>
+                Hoşgeldin, {{ request.user.username }}</p>
+
+        </div>
+    </center>
+    <!-- anasayfada kimin giriş yaptığının görünmesi için bu kodu yazdık. isim anasayfada görünür. -->
+
+{% endblock %}
+
+
+
+
