@@ -1,0 +1,46 @@
+from django import forms
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=100, label='Kullanıcı Adı')
+    password = forms.CharField(max_length=100, label='Parola', widget=forms.PasswordInput)
+    # password alanına yazılan karakterlerin ekranda gözükmemesi için widget kullandık.
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        #form dan username ve password bilgilerini çektik. cleaned data metodu girişi onayladıysa  değişkenlere veri aktarır. onaylamadıysa username veya password değişkeni boş kalır.
+        #username ve password değişkenlerini if döngüsüne koyarak içinin dolu olduğu durumları ele alırız.
+        #sonra bu bilgileri authenticate metoduna sokarak sistemde böyle bir kullanıcının olup olmadığını kontrol ederiz.
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise forms.ValidationError('Kullanıcı adı veya parola yanlış!')
+            #eğer böyle bir kullanıcı yoksa forma validationerror yani doğrulama hatası gönderiririz.
+            return super(LoginForm, self).clean()
+
+#üye olma işlemleri için.
+class RegisterForm(forms.ModelForm):
+    username = forms.CharField(max_length=100, label='Kullanıcı Adı')
+    password1 = forms.CharField(max_length=100, label='Parola', widget=forms.PasswordInput)
+    password2 = forms.CharField(max_length=100, label='Parola Doğrulama', widget=forms.PasswordInput)
+
+
+class Meta:
+
+    model = User
+    fields =[
+        'username',
+        'password1',
+        'password2',
+    ]
+
+def clean_password2(self):
+    password1 = self.cleaned_data.get('password1')
+    password2 = self.cleaned_data.get('password2')
+    if password1 and password2 and password1 != password2:
+        raise forms.ValidationError("Parolalar eşleşmiyor!")
+    return password2
